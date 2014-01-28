@@ -1,6 +1,6 @@
 CljChips
 -------
-CljChips is a [RedstoneChips](http://eisental.github.com/RedstoneChips) circuit library that makes it possible to program new circuits and add minecraft commands using [Clojure](http://clojure.org)
+CljChips is a [RedstoneChips](http://eisental.github.com/RedstoneChips) circuit library that makes it possible to program new circuits and add minecraft commands using [Clojure](http://clojure.org).
 
 Compile
 ---------
@@ -15,13 +15,13 @@ Install
 
 Usage
 -----
-The chip library adds a `clj` circuit type.
-The first sign argument is the clojure script namespace (usually the script filename without the .clj extension).
+The chip library adds a `clj` circuit type and a /clj command.
+The first sign argument for the clj chip is a clojure script namespace (usually the script filename without the .clj extension).
 
 Contribute
 ----------
-- If you have any feature suggestions, bug reports or other issues, please use the [issue tracker](https://github.com/eisental/JSChip/issues).
-- We happily accept contributions. The best way to do this is to fork Rubyc on GitHub, add your changes, and then submit a pull request. We'll try it out, and hopefully merge it into JSChip.
+- If you have any feature suggestions, bug reports or other issues, please use the [issue tracker](https://github.com/eisental/CljChips/issues).
+- We happily accept contributions. The best way to do this is to fork CljChips on GitHub, add your changes, and then submit a pull request. We'll try it out, and hopefully merge it into CljChips.
 
 Changelog
 ---------
