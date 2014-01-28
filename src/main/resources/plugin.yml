@@ -1,0 +1,13 @@
+name: CljChips
+main: org.redstonechips.cljchips.CljChips
+version: 0.1
+depend: [RedstoneChips]
+commands:
+  cljchips:
+    description: 
+    usage: |
+      `cljchips`
+    aliases: [clj]
+  redstonechips-x:
+    description: Hook for script based commands.
+    aliases: [rcx]

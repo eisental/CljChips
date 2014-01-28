@@ -1,0 +1,8 @@
+(on init [args]
+  ($ info "<NAME> is running.")
+  ($ info (str "args: " (seq args)))
+  circuit)
+
+(on input [state idx]
+  (when (< idx ($ outputlen))
+    ($ write state idx)))
