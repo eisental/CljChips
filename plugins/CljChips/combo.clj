@@ -1,4 +1,4 @@
-(import (org.redsontechips.circuit CircuitLoader Circuit)
+(import (org.redstonechips.circuit CircuitLoader Circuit)
         (org.redstonechips.chip.io IOWriter))
 
 (defn make-circuit [activator chip type args inputlen outputlen io-writer]
@@ -17,17 +17,19 @@
   (fn [state index] (.input output-circuit state index)))
 
 (on init [args]
-  (def counter (make-circuit "counter" [] 1 4 out-writer))
-  (def clock (make-circuit "clock" ["100ms" "0.5"] 1 1 (make-chain-writer counter)))
-  circuit)
+    (def counter (make-circuit ($ activator) ($ chip) "counter" [] 1 4
+                  out-writer))
+    (def clock (make-circuit ($ activator) ($ chip) "clock" ["100ms" "0.5"] 1 1
+                (make-chain-writer counter)))
+  this)
 
 (on input [state idx]
-  (aset (.inputs clock) idx state)
-  (.input clock state idx))
+    (aset (.inputs clock) idx state)
+    (.input clock state idx))
 
 (on shutdown []
-  (.shutdown counter)
-  (.shutdown clock))
+    (.shutdown counter)
+    (.shutdown clock))
 
 
 ;; - Call all possible methods of nested circuits.
