@@ -59,7 +59,7 @@ public class CljChipsCommand extends RCCommand {
             String name = signArgs[0];                
             try {
                 createNewCljFile(p, name);
-                rc.chipManager().maybeScanChip(b, cs, 0);
+                rc.chipManager().maybeCreateAndActivateChip(b, cs, 0);
             } catch (IllegalArgumentException|IOException e) {
                 error(p, e.getMessage());
             }

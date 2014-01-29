@@ -5,9 +5,10 @@ import clojure.lang.Namespace;
 import clojure.lang.Symbol;
 import clojure.lang.Var;
 import java.io.FileNotFoundException;
+import org.redstonechips.RCPrefs;
 import org.redstonechips.chip.Chip;
 import org.redstonechips.chip.ChipListenerImpl;
-import org.redstonechips.chip.Circuit;
+import org.redstonechips.circuit.Circuit;
 
 /**
  *
@@ -43,7 +44,7 @@ public class clj extends Circuit {
         } catch (Exception ex) {
             if (ex instanceof FileNotFoundException) {
                 return error("Can't load file: " + ex.getMessage() + "\n" + 
-                        rc.prefs().getInfoColor() + "Use `/clj create` to create a new file.");
+                        RCPrefs.getInfoColor() + "Use `/clj create` to create a new file.");
             } else {
                 ex.printStackTrace();
                 return error(ex.getMessage());

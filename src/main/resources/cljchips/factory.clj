@@ -1,5 +1,5 @@
 (ns cljchips.factory
-  (import (org.redstonechips.chip Circuit)
+  (import (org.redstonechips.circuit Circuit)
           (org.redstonechips.cljchips CljChips)
           (java.io File))
   (require [clojure.string :as str]))

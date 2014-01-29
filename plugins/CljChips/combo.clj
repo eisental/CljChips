@@ -1,27 +1,14 @@
-(import (org.redstonechips CircuitLoader)
+(import (org.redsontechips.circuit CircuitLoader Circuit)
         (org.redstonechips.chip.io IOWriter))
 
-(defn init-circuit [c args]
-  (set! (.activator c) ($ activator))
-  (let [init-c (.init c args)]
-    (set! (.activator c) nil)
-    init-c))
-
-(defn make-circuit [type args inputlen outputlen io-writer]
+(defn make-circuit [activator chip type args inputlen outputlen io-writer]
   (let [args (into-array String args)
-        c (doto (CircuitLoader/getCircuitInstance type)
-          (.constructWith
-           ($ chip)
-           (reify IOWriter
-             (writeOut [this state index]
-               (io-writer state index)))
-           inputlen
-           outputlen))]
-    (loop [c1 c
-           c2 (init-circuit c1 args)]
-      (cond (nil? c2) nil
-            (= c1 c2) c2
-            :else (recur c2 (init-circuit c2 args))))))
+        circuit (doto (CircuitLoader/getCircuitInstance type)
+                  (.constructWith chip (reify IOWriter
+                                         (writeOut [this state index]
+                                           (io-writer state index)))
+                                  inputlen outputlen))]
+    (Circuit/initalizeCircuit circuit activator args)))
 
 (defn out-writer [state index]
   ($ write state index))

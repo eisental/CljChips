@@ -1,6 +1,7 @@
 (ns cljchips.core
   (:import (org.redstonechips RedstoneChips)
-           (org.redstonechips.chip ChipListenerImpl Circuit Chip)
+           (org.redstonechips.chip ChipListenerImpl Chip)
+           (org.redstonechips.circuit Circuit)
            (org.redstonechips.wireless Transmitter Receiver)
            (org.redstonechips.cljchips CljChips)
            (org.redstonechips.util BooleanSubset))
@@ -14,7 +15,6 @@
 (def main-world #(first (.getWorlds server)))
 (def scheduler (.getScheduler server))
 (def chipManager (.chipManager rc))
-(def rc-prefs (.prefs rc))
 (def all-chips (.getAllChips chipManager))
 
 (defn on-server-thread

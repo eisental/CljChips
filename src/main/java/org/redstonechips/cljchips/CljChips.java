@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.redstonechips.RedstoneChips;
-import org.redstonechips.chip.CircuitLibrary;
+import org.redstonechips.circuit.CircuitLibrary;
 
 /**
  *

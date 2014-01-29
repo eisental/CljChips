@@ -5,19 +5,19 @@
                                                default-handler)]
            [lighttable.nrepl.handler :refer (lighttable-ops)])
   (import (org.redstonechips.cljchips CljChips clj)
-          (org.redstonechips RedstoneChips)))
+          (org.redstonechips RCPrefs)))
 
 ;; Add libray folder to classpath.
 (cemerick.pomegranate/add-classpath (CljChips/folder))
 
 (require '[cljchips.command :refer (register-rcx)])
-(require '[cljchips.core :refer (rc-prefs rc scheduler)])
+(require '[cljchips.core :refer (rc scheduler)])
 
 ;; Setup clj preferences.
-(.registerCircuitPreference rc-prefs clj "REPLport" 4555)
-(.registerCircuitPreference rc-prefs clj "runREPL" true)
-(def REPLport (.getPref rc-prefs "clj.REPLport"))
-(def runREPL (.getPref rc-prefs "clj.runREPL"))
+(RCPrefs/registerCircuitPreference clj "REPLport" 4555)
+(RCPrefs/registerCircuitPreference clj "runREPL" true)
+(def REPLport (RCPrefs/getPref "clj.REPLport"))
+(def runREPL (RCPrefs/getPref "clj.runREPL"))
 
 ;; Register the /rcx command multimethod
 (register-rcx)

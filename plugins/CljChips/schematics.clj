@@ -2,7 +2,7 @@
   (require [cljchips.core :refer :all] :reload
            [cljchips.command :refer (rcx)]
            [cljchips.block :refer :all] :reload)
-  (import (org.redstonechips RedstoneChips)
+  (import (org.redstonechips RCPrefs)
           (org.redstonechips.chip Chip)
           (org.redstonechips.chip.io OutputPin)
           (org.redstonechips.util Signs)
@@ -19,9 +19,9 @@
 
 ;; Default IO block types
 
-(defn input-block-type [] (-> rc .prefs .getInputBlockType material->map))
-(defn output-block-type [] (-> rc .prefs .getOutputBlockType material->map))
-(defn interface-block-type [] (-> rc .prefs .getInterfaceBlockType material->map))
+(defn input-block-type [] (material->map (RCPrefs/getInputBlockType)))
+(defn output-block-type [] (material->map (RCPrefs/getOutputBlockType)))
+(defn interface-block-type [] (material->map (RCPrefs/getInterfaceBlockType)))
 
 ;; Templates
 
