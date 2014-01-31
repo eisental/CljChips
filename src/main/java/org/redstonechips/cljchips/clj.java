@@ -33,7 +33,7 @@ public class clj extends Circuit {
             if (circuitObj==null || !(circuitObj instanceof Circuit))
                 return error("circuit var is nil." + (circuitObj!=null? " Found " + circuitObj.getClass().getCanonicalName() + "." : ""));
             else {                
-                Circuit circuit = ((Circuit)circuitObj).constructWith(chip, chip);
+                Circuit circuit = ((Circuit)circuitObj).constructWith(chip);
                 circuit.putMeta("ns", ns.name);
                 chip.addListener(new RemoveNSListener());
                 info("Running script " + args[0] + " in namespace `" + ns.name.getName() + "`");
