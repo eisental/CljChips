@@ -1,6 +1,7 @@
 
 package org.redstonechips.cljchips;
 
+import clojure.lang.Keyword;
 import clojure.lang.Symbol;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,7 +68,7 @@ public class CljChipsCommand extends RCCommand {
         } else if ("load".startsWith(args[0])) {
             if (args.length>=2) {
                 try {
-                    CljChips.require.invoke(Symbol.intern(null, args[1]));
+                    CljChips.require.invoke(Symbol.intern(null, args[1]), Keyword.intern(null, "reload"));
                     info(cs, "Loaded " + args[1] + ".");
                 } catch (Exception ex) {
                     error(cs, ex.getMessage());
