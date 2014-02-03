@@ -21,9 +21,7 @@ public class CljChips extends CircuitLibrary {
     private static CljChips inst;
     public static CljChips inst() { return inst; }
     
-    public static IFn load_clj_circuit;
-    public static IFn require;
-    public static IFn remove_ns;
+    public static IFn load_clj_circuit, require, remove_ns, find_ns;
     
     @Override
     public Class[] getCircuitClasses() {
@@ -44,6 +42,7 @@ public class CljChips extends CircuitLibrary {
             // keep some function references
             require = Var.intern(Symbol.intern(null, "clojure.core"), Symbol.intern(null, "require"));
             remove_ns = Var.intern(Symbol.intern(null, "clojure.core"), Symbol.intern(null, "remove-ns"));
+            find_ns = Var.intern(Symbol.intern(null, "clojure.core"), Symbol.intern(null, "find-ns"));
             
             require.invoke(Symbol.intern(null, "cljchips.factory"));
             load_clj_circuit = Var.intern(Symbol.intern(null, "cljchips.factory"), Symbol.intern(null, "load-clj-circuit"));

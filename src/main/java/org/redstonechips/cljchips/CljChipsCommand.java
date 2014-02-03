@@ -2,6 +2,7 @@
 package org.redstonechips.cljchips;
 
 import clojure.lang.Keyword;
+import clojure.lang.Namespace;
 import clojure.lang.Symbol;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,6 +12,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -68,7 +72,17 @@ public class CljChipsCommand extends RCCommand {
         } else if ("load".startsWith(args[0])) {
             if (args.length>=2) {
                 try {
-                    CljChips.require.invoke(Symbol.intern(null, args[1]), Keyword.intern(null, "reload"));
+                    Symbol symNs = Symbol.intern(null, args[1]);
+                    CljChips.require.invoke(symNs, Keyword.intern(null, "reload"));
+                    Namespace ns = (Namespace)CljChips.find_ns.invoke(symNs);
+                    System.out.println(ns);
+                    if (ns!=null) {
+                        String doc = (String)ns.meta().valAt(Keyword.intern(null, "doc"));
+                        Pattern p = Pattern.compile("(`)([^`]*)(`)");
+                        Matcher m = p.matcher(doc);
+                        String prettydoc = ChatColor.GOLD + m.replaceAll(ChatColor.GRAY + "$2" + ChatColor.GOLD);
+                        info(cs, ""+ prettydoc);
+                    }
                     info(cs, "Loaded " + args[1] + ".");
                 } catch (Exception ex) {
                     error(cs, ex.getMessage());
