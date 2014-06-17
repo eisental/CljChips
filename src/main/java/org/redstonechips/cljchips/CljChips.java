@@ -1,15 +1,16 @@
 package org.redstonechips.cljchips;
 
+import clojure.java.api.Clojure;
 import clojure.lang.IFn;
 import clojure.lang.RT;
 import clojure.lang.Symbol;
-import clojure.lang.Var;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.redstonechips.RedstoneChips;
 import org.redstonechips.circuit.CircuitLibrary;
+import org.redstonechips.event.EventDispatcher;
 
 /**
  *
@@ -22,6 +23,8 @@ public class CljChips extends CircuitLibrary {
     public static CljChips inst() { return inst; }
     
     public static IFn load_clj_circuit, require, remove_ns, find_ns;
+    
+    public static EventDispatcher eventDispatcher = new EventDispatcher();
     
     @Override
     public Class[] getCircuitClasses() {
@@ -40,12 +43,12 @@ public class CljChips extends CircuitLibrary {
             RT.loadResourceScript("cljchips/init.clj");
             
             // keep some function references
-            require = Var.intern(Symbol.intern(null, "clojure.core"), Symbol.intern(null, "require"));
-            remove_ns = Var.intern(Symbol.intern(null, "clojure.core"), Symbol.intern(null, "remove-ns"));
-            find_ns = Var.intern(Symbol.intern(null, "clojure.core"), Symbol.intern(null, "find-ns"));
+            require = Clojure.var("clojure.core", "require");
+            remove_ns = Clojure.var("clojure.core", "remove-ns");
+            find_ns = Clojure.var("clojure.core", "find-ns");
             
             require.invoke(Symbol.intern(null, "cljchips.factory"));
-            load_clj_circuit = Var.intern(Symbol.intern(null, "cljchips.factory"), Symbol.intern(null, "load-clj-circuit"));
+            load_clj_circuit = Clojure.var("cljchips.factory", "load-clj-circuit");
         } catch (IOException ex) {
             Logger.getLogger(CljChips.class.getName()).log(Level.SEVERE, null, ex);
         }                 
@@ -60,12 +63,15 @@ public class CljChips extends CircuitLibrary {
     @Override
     public void onEnable() {
         getCommand("cljchips").setExecutor(new CljChipsCommand());
-        getCommand("redstonechips-x").setExecutor(new RcxDispatcher());        
+        getCommand("redstonechips-x").setExecutor(new RcxDispatcher());
+        
+        eventDispatcher.bindToPlugin(this);
     }
 
     @Override
     public void onDisable() {
         inst = null;
+        eventDispatcher.stop();
     }               
     
     public static boolean isValidCljName(String name) {

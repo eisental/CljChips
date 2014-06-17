@@ -12,8 +12,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -37,60 +35,71 @@ public class CljChipsCommand extends RCCommand {
     
     @Override
     public void run(CommandSender cs, Command cmnd, String label, String[] args) {
-        if (args.length==0) error(cs, "For help enter `/clj help`");
+        if (args.length==0) cljHelp(cs, args);        
         else if ("create".startsWith(args[0])) {
-            Player p = CommandUtils.enforceIsPlayer(cs);
-            if (p==null) return;
-            
-            Block b = CommandUtils.targetBlock(p);
-            
-            if (rc.chipManager().getAllChips().getByStructureBlock(b.getLocation())!=null) {
-                error(cs, "Target block belongs to an active chip.");
-                return;
-            } 
-            
-            if (!(b.getState() instanceof Sign)) {
-                error(cs, "Target block is not a sign.");
-                return;
-            }
-            
-            Sign sign = (Sign)b.getState();
-            String[] signArgs = Signs.readArgsFromSign(sign);
-            if (signArgs.length==0) {
-                error(cs, "Clojure name is missing from the sign.");
-                return;
-            }
-            
-            String name = signArgs[0];                
-            try {
-                createNewCljFile(p, name);
-                rc.chipManager().maybeCreateAndActivateChip(b, cs, 0);
-            } catch (IllegalArgumentException|IOException e) {
-                error(p, e.getMessage());
-            }
+            Player p = CommandUtils.enforceIsPlayer(cs);            
+            cljCreate(p);
             
         } else if ("load".startsWith(args[0])) {
-            if (args.length>=2) {
-                try {
-                    Symbol symNs = Symbol.intern(null, args[1]);
-                    CljChips.require.invoke(symNs, Keyword.intern(null, "reload"));
-                    Namespace ns = (Namespace)CljChips.find_ns.invoke(symNs);
-                    System.out.println(ns);
-                    if (ns!=null) {
-                        String doc = (String)ns.meta().valAt(Keyword.intern(null, "doc"));
-                        Pattern p = Pattern.compile("(`)([^`]*)(`)");
-                        Matcher m = p.matcher(doc);
-                        String prettydoc = ChatColor.GOLD + m.replaceAll(ChatColor.GRAY + "$2" + ChatColor.GOLD);
-                        info(cs, ""+ prettydoc);
-                    }
-                    info(cs, "Loaded " + args[1] + ".");
-                } catch (Exception ex) {
-                    error(cs, ex.getMessage());
-                }
-            }
+            cljLoad(cs, args);
         }
         
     }    
+    
+    private void cljCreate(Player p) {
+        if (p==null) return;        
+        
+        Block b = CommandUtils.targetBlock(p);
+
+        if (rc.chipManager().getAllChips().getByStructureBlock(b.getLocation())!=null) {
+            error(p, "Target block belongs to an active chip.");
+            return;
+        } 
+
+        if (!(b.getState() instanceof Sign)) {
+            error(p, "Target block is not a sign.");
+            return;
+        }
+
+        Sign sign = (Sign)b.getState();
+        String[] signArgs = Signs.readArgsFromSign(sign);
+        if (signArgs.length==0) {
+            error(p, "Clojure circuit name is missing from the sign.");
+            return;
+        }
+
+        String name = signArgs[0];                
+        try {
+            createNewCljFile(p, name);
+            rc.chipManager().maybeCreateAndActivateChip(b, p, 0);
+        } catch (IllegalArgumentException|IOException e) {
+            error(p, e.getMessage());
+        }
+
+    }
+    
+    private void cljLoad(CommandSender cs, String[] args) {
+        if (args.length>=2) {
+            try {
+                Symbol symNs = Symbol.intern(null, args[1]);
+                CljChips.require.invoke(symNs, Keyword.intern(null, "reload"));
+                Namespace ns = (Namespace)CljChips.find_ns.invoke(symNs);
+
+                if (ns!=null && ns.meta()!=null) {
+                    String doc = CommandUtils.colorize((String)ns.meta().valAt(Keyword.intern(null, "doc")), ChatColor.GOLD);
+                    info(cs, doc);
+                }
+                info(cs, "Loaded " + args[1] + ".");
+            } catch (Exception ex) {
+                error(cs, ex.getMessage());
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void cljHelp(CommandSender cs, String[] args) {
+        
+    }
     
     public void createNewCljFile(Player p, String name) throws IllegalArgumentException, IOException {
         if (!CljChips.isValidCljName(name)) 
@@ -127,6 +136,5 @@ public class CljChipsCommand extends RCCommand {
         text = text.replaceAll("<NAME>", name);
         
         return text;
-    }
-    
+    }    
 }

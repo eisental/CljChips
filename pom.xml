@@ -67,11 +67,6 @@
         </dependency>
         <dependency>
             <groupId>org.clojure</groupId>
-            <artifactId>clojure</artifactId>
-            <version>1.5.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.clojure</groupId>
             <artifactId>tools.nrepl</artifactId>
             <version>0.2.3</version>
         </dependency>
@@ -79,6 +74,26 @@
             <groupId>lein-light-nrepl</groupId>
             <artifactId>lein-light-nrepl</artifactId>
             <version>0.0.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.clojure</groupId>
+            <artifactId>core.logic</artifactId>
+            <version>0.8.5</version>
+        </dependency>
+        <dependency>
+            <groupId>net.mikera</groupId>
+            <artifactId>core.matrix</artifactId>
+            <version>0.19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.clojure</groupId>
+            <artifactId>clojure</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>clojure-watch</groupId>
+            <artifactId>clojure-watch</artifactId>
+            <version>0.1.9</version>
         </dependency>
     </dependencies>
     <properties>
